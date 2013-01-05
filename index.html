@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Puppet-ssh : Puppet module to manage SSH host and user access" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Puppet-ssh</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/erwbgy/puppet-ssh">View on GitHub</a>
+
+          <h1 id="project_title">Puppet-ssh</h1>
+          <h2 id="project_tagline">Puppet module to manage SSH host and user access</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/erwbgy/puppet-ssh/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/erwbgy/puppet-ssh/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>puppet-ssh</h1>
+
+<p>Puppet module to manage SSH host and user access.</p>
+
+<p>The recommended usage is to place the configuration is hiera and just:</p>
+
+<pre><code>include ssh
+</code></pre>
+
+<p>Example hiera config:</p>
+
+<pre><code>ssh::access::group: 'sshaccess'
+ssh::access::gid:   '555'
+ssh::access::allow:
+  - 'alice'
+  - 'bob'
+ssh::access::deny:
+  - 'mallory'
+
+ssh::keys::bob:
+  type: 'ssh-rsa'
+  public_key: 'AAAAB3NzaC1yc2EAAAABJQAAAQBaSth67VpPf6i737TWFYwBUwZdovDyfr2df94YbINWOkOQTBoaR5TnUSgqorpTUGmif8w2khqWWb/ZI+l5HQckR8WVVgBDnFPnXcYZ2ok0qV85bD/ttlpw4QDMb82+f72YcBu4h5A2eKxroqFQCyigfXtE3JjgakIm3iW7OW6XQUkAT8MZFhy3xlodJCdNOxvxawd9CVpw70cTeA7bXBiS8AFUpcKp20Z45tixiESrH2E4TRCy8HHxnN6fGUG+Xt6No265fPpEc+Bg+/hkrguIVEuj2NoIoQcS4F8Kew73jnJte4qugNbJIwcKTWn3NvgjA2CwPIWxvkvJerx129cf'
+
+ssh::users:
+  bob:
+    allow: [ 'alice', 'bob' ]
+    deny:  [ 'mallory' ]
+  tomcat1:
+    allow: [ 'alice', 'bob', 'sam' ]
+</code></pre>
+
+<h2>Host SSH access</h2>
+
+<p>Access to the host is restricted using the OpenSSH AllowGroup directive where
+only members of the specified group are allowed access using SSH.</p>
+
+<p><strong>ssh::access</strong> parameters:</p>
+
+<p><em>group</em>: The group that users have to be a member of to access the host using
+SSH.  Default: 'sshusers'</p>
+
+<p><em>gid</em>: The group id of the group. Default: undef</p>
+
+<p><em>allow</em>: The list of users to add as members of the group who will be allowed
+SSH access</p>
+
+<p><em>deny</em> The list of members that must not be a member of the group and will not
+be allowed SSH access</p>
+
+<p>If the group is defined elsewhere in the puppet configuration then no action is
+taken and 'gid' parameter is ignored.  (This is useful if you use something
+like system::groups.)</p>
+
+<p>If the group is not defined elsewhere and 'gid' is set then the group is
+created with this gid.</p>
+
+<p>If the group is not defined elsewhere and 'gid' is not set then the group is
+created as a system group with the next available gid.</p>
+
+<h2>SSH public keys</h2>
+
+<p>User SSH public keys are configured using <strong>ssh::keys::</strong> entries -
+for example to specify the public key for the bob user:</p>
+
+<pre><code>ssh::keys::bob:
+  type: 'ssh-rsa'
+  public_key: 'AAAAB3NzaC1yc2EAAAABJQAAAQBaSth67VpPf6i737TWFYwBUwZdovDyfr2df94YbINWOkOQTBoaR5TnUSgqorpTUGmif8w2khqWWb/ZI+l5HQckR8WVVgBDnFPnXcYZ2ok0qV85bD/ttlpw4QDMb82+f72YcBu4h5A2eKxroqFQCyigfXtE3JjgakIm3iW7OW6XQUkAT8MZFhy3xlodJCdNOxvxawd9CVpw70cTeA7bXBiS8AFUpcKp20Z45tixiESrH2E4TRCy8HHxnN6fGUG+Xt6No265fPpEc+Bg+/hkrguIVEuj2NoIoQcS4F8Kew73jnJte4qugNbJIwcKTWn3NvgjA2CwPIWxvkvJerx129cf'
+</code></pre>
+
+<p><strong>ssh::keys::</strong> parameters:</p>
+
+<p><em>type</em>: The type of SSH key, usually either 'ssh-rsa' or 'ssh-dsa'. <em>Required</em></p>
+
+<p><em>public_key</em>: The base64-encoded public key. <em>Required</em></p>
+
+<h2>User SSH access</h2>
+
+<p>Access to a user account is determined by the public keys listed in the user's
+$HOME/.ssh/ssh_authorized_keys file.  </p>
+
+<p>For example to allow access to the bob user account using both bob and alice's
+public keys:</p>
+
+<pre><code>ssh::users:
+  bob:
+    allow: [ 'alice', 'bob' ]
+    deny:  [ 'mallory' ]
+</code></pre>
+
+<p>For each <strong>ssh::users</strong> user specified the following parameters can be
+specified:</p>
+
+<p><em>allow</em>: The list of users whose public key must be added to the user's
+authorized_keys file and who will be allowed access to the user account using
+SSH</p>
+
+<p><em>deny</em>: The list of users to allow whose public key must not be present in the
+user's authorized_keys file and who will not be allowed access to the user
+account using SSH</p>
+
+<h2>Notes</h2>
+
+<ul>
+<li>Only a single SSH public key can be specified for each user</li>
+</ul><h2>Support</h2>
+
+<p>License: Apache License, Version 2.0</p>
+
+<p>GitHub URL: <a href="https://github.com/erwbgy/puppet-ssh">https://github.com/erwbgy/puppet-ssh</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Puppet-ssh maintained by <a href="https://github.com/erwbgy">erwbgy</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
