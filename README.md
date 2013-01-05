@@ -86,11 +86,13 @@ public keys:
 For each **ssh::users** user specified the following parameters can be
 specified:
 
-*allow*: The list of users whose public key must be added to the
-user's authorized_keys file
+*allow*: The list of users whose public key must be added to the user's
+authorized_keys file and who will be allowed access to the user account using
+SSH
 
-*deny*: The list of users to allow whose public key must not be present in
-the user's authorized_keys file
+*deny*: The list of users to allow whose public key must not be present in the
+user's authorized_keys file and who will not be allowed access to the user
+account using SSH
 
 ## Notes
 
