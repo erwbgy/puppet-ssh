@@ -45,9 +45,9 @@ SSH access
 *deny* The list of members that must not be a member of the group and will not
 be allowed SSH access
 
-If the group is defined elsewhere in the puppet configuration then the 'group'
-and 'gid' parameters do nothing.  (This is useful if you use something like
-system::groups.)
+If the group is defined elsewhere in the puppet configuration then no action is
+taken and 'gid' parameter is ignored.  (This is useful if you use something
+like system::groups.)
 
 If the group is not defined elsewhere and 'gid' is set then the group is
 created with this gid.
@@ -68,7 +68,7 @@ for example to specify the public key for the bob user:
 
 *type*: The type of SSH key, usually either 'ssh-rsa' or 'ssh-dsa'. *Required*
 
-*public_key: The base64-encoded public key. *Required*
+*public_key*: The base64-encoded public key. *Required*
 
 ## User SSH access
 
