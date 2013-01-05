@@ -1,0 +1,16 @@
+ssh::access::group: 'sshaccess'
+ssh::access::gid:   '555'
+ssh::access::allow:
+  - 'alice'
+  - 'bob'
+ssh::access::deny:
+  - 'mallory'
+
+ssh::keys::bob:
+  type: 'ssh-rsa'
+  public_key: 'AAAAB3NzaC1yc2EAAAABJQAAAQBaSth67VpPf6i737TWFYwBUwZdovDyfr2df94YbINWOkOQTBoaR5TnUSgqorpTUGmif8w2khqWWb/ZI+l5HQckR8WVVgBDnFPnXcYZ2ok0qV85bD/ttlpw4QDMb82+f72YcBu4h5A2eKxroqFQCyigfXtE3JjgakIm3iW7OW6XQUkAT8MZFhy3xlodJCdNOxvxawd9CVpw70cTeA7bXBiS8AFUpcKp20Z45tixiESrH2E4TRCy8HHxnN6fGUG+Xt6No265fPpEc+Bg+/hkrguIVEuj2NoIoQcS4F8Kew73jnJte4qugNbJIwcKTWn3NvgjA2CwPIWxvkvJerx129cf'
+
+ssh::users:
+  bob:
+    allow: [ 'alice', 'bob' ]
+    deny:  [ 'mallory' ]

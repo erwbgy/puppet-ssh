@@ -1,0 +1,8 @@
+name    'erwbgy-ssh'
+version '0.1.0'
+source 'https://github.com/erwbgy/puppet-ssh'
+author 'erwbgy'
+license 'Apache License, Version 2.0'
+summary 'Manage SSH host and user access'
+description 'Manage SSH host and user access'
+project_page 'http://forge.puppetlabs.com/erwbgy/ssh'
