@@ -1,0 +1,7 @@
+0.2.0
+
+* Avoid the need for a new group to hold users allowed and denies access as we
+can use the AllowUsers and DenyUsers directives instead.  Also add support for
+groups (with an @ prefix) using AllowGroups and DenyGroups.
+
+* Added Rakefile and made puppet-lint fixes.
