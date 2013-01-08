@@ -28,7 +28,7 @@ class ssh::access (
   if size($allow_groups) > 0 {
     create_resources(
       sshd_config,
-      { 'DenyUsers'   => { 'value' => $allow_groups, } }
+      { 'DenyUsers'   => { 'value' => $deny_users, } }
     )
   }
 }
