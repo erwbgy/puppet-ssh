@@ -42,13 +42,13 @@
 
 <p>Example hiera config:</p>
 
-<pre><code>ssh::access::group: 'sshaccess'
-ssh::access::gid:   '555'
-ssh::access::allow:
+<pre><code>ssh::access::allow:
   - 'alice'
   - 'bob'
+  - '@sysadmins'
 ssh::access::deny:
   - 'mallory'
+  - '@dev'
 
 ssh::keys::bob:
   type: 'ssh-rsa'
@@ -64,31 +64,18 @@ ssh::users:
 
 <h2>Host SSH access</h2>
 
-<p>Access to the host is restricted using the OpenSSH AllowGroup directive where
-only members of the specified group are allowed access using SSH.</p>
+<p>Access to the host using is restricted using OpenSSH sshd directives to allow
+and deny access to users or group members.  As per the sshd_config(5) man page,
+the allow/deny directives are processed in the following order: DenyUsers,
+AllowUsers, DenyGroups, and finally AllowGroups.</p>
 
 <p><strong>ssh::access</strong> parameters:</p>
 
-<p><em>group</em>: The group that users have to be a member of to access the host using
-SSH.  Default: 'sshusers'</p>
+<p><em>allow</em>: The list of users or groups who will be allowed SSH access. Group
+names are prefixed with an '@' sign.</p>
 
-<p><em>gid</em>: The group id of the group. Default: undef</p>
-
-<p><em>allow</em>: The list of users to add as members of the group who will be allowed
-SSH access</p>
-
-<p><em>deny</em> The list of members that must not be a member of the group and will not
-be allowed SSH access</p>
-
-<p>If the group is defined elsewhere in the puppet configuration then no action is
-taken and 'gid' parameter is ignored.  (This is useful if you use something
-like system::groups.)</p>
-
-<p>If the group is not defined elsewhere and 'gid' is set then the group is
-created with this gid.</p>
-
-<p>If the group is not defined elsewhere and 'gid' is not set then the group is
-created as a system group with the next available gid.</p>
+<p><em>deny</em> The list of users or groups that will not be allowed SSH access. Group
+names are prefixed with an '@' sign.</p>
 
 <h2>SSH public keys</h2>
 
