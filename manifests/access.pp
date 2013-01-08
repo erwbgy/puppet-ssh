@@ -3,8 +3,8 @@ class ssh::access (
   $deny  = [],
 ) {
   include augeasproviders
-  $allow_groups = grep($allow, '^@')
-  $deny_groups  = grep($deny,  '^@')
+  $allow_groups = regsubst( grep($allow, '^@'), '^@(.*)$', '\1' )
+  $deny_groups  = regsubst( grep($deny,  '^@'), '^@(.*)$', '\1' )
   $allow_users  = grep($allow, '^[^@]')
   $deny_users   = grep($deny,  '^[^@]')
   if size($allow_groups) > 0 {
