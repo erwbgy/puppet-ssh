@@ -3,8 +3,10 @@ ssh::access::gid:   '555'
 ssh::access::allow:
   - 'alice'
   - 'bob'
+  - '@sysadmins'
 ssh::access::deny:
   - 'mallory'
+  - '@dev'
 
 ssh::keys::bob:
   type: 'ssh-rsa'

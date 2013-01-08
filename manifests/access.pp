@@ -1,30 +1,26 @@
 class ssh::access (
-  $group = 'sshusers',
-  $gid   = undef,
   $allow = [],
   $deny  = [],
 ) {
   include augeasproviders
+  $allow_groups = grep($allow, '/^@')
+  $deny_groups  = grep($deny,  '/^@')
+  $allow_users  = grep($allow, '/^[^@]')
+  $deny_users   = grep($deny,  '/^[^@]')
   create_resources(
     sshd_config, 
-    { 'AllowGroups' => { 'value' => [ $group ] } }
+    { 'AllowGroups' => { 'value' => $allow_groups, '/^@') } }
   )
-  if ! defined(Group[$group]) {
-    if $gid {
-      group { $group: gid     => $gid, }
-    }
-    else {
-      group { $group: system  => true, }
-    }
-  }
-  ssh::group_member { $allow:
-    group   => $group,
-    ensure  => present,
-    require => Group[$group],
-  }
-  ssh::group_member { $deny:
-    group   => $group,
-    ensure  => absent,
-    require => Group[$group],
-  }
+  create_resources(
+    sshd_config, 
+    { 'DenyGroups'  => { 'value' => $deny_groups, '/^@') } }
+  )
+  create_resources(
+    sshd_config, 
+    { 'AllowUsers'  => { 'value' => $allow_users, '/^[^@]') } }
+  )
+  create_resources(
+    sshd_config, 
+    { 'DenyUsers'   => { 'value' => $deny_users, '/^[^@]') } }
+  )
 }
