@@ -1,14 +1,16 @@
 define ssh::key_entry (
-  $ensure = 'present',
+  $ensure,
 ) {
-  $user = $title
+  $a = split($title, ',')
+  $owner = $a[0]
+  $user  = $a[1]
   $key = hiera_hash( "ssh::keys::${user}" )
   if $key {
-    ssh_authorized_key { "${user}@${::hostname}":
+    ssh_authorized_key { "${user}-key-${ensure}-in-${owner}@${::hostname}":
       ensure => $ensure,
       key    => $key[public_key],
       type   => $key[type],
-      user   => $user,
+      user   => $owner,
     }
   }
   else {

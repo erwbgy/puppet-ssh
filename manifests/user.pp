@@ -2,7 +2,9 @@ define ssh::user (
   $allow = [],
   $deny  = [],
 ) {
-  $user = $title
-  ssh::user_entry { $allow: ensure => 'present' }
-  ssh::user_entry { $deny:  ensure => 'absent' }
+  $owner = $title
+  $allow_list = prefix($allow, "${owner},")
+  $deny_list  = prefix($deny,  "${owner},")
+  ssh::user_entry { $allow_list: ensure => 'present', }
+  ssh::user_entry { $deny_list:  ensure => 'absent',  }
 }

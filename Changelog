@@ -1,3 +1,7 @@
+0.2.1:
+
+* Fixed authorized_keys entries being created for the wrong user (thanks egraaf)
+
 0.2.0
 
 * Avoid the need for a new group to hold users allowed and denies access as we

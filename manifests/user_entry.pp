@@ -1,6 +1,11 @@
 define ssh::user_entry (
-  $ensure = 'present',
+  $ensure,
 ) {
-  $user = $title
-  create_resources('ssh::key_entry', { "${user}" => { 'ensure' => $ensure } } )
+  create_resources('ssh::key_entry',
+    {
+      "${title}" => {
+        'ensure' => $ensure,
+      }
+    }
+  )
 }
