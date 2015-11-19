@@ -8,8 +8,8 @@ define ssh::key_entry (
   if $key {
     ssh_authorized_key { "${user}-key-${ensure}-in-${owner}@${::hostname}":
       ensure => $ensure,
-      key    => $key[public_key],
-      type   => $key[type],
+      key    => $key['public_key'],
+      type   => $key['type'],
       user   => $owner,
     }
   }
